@@ -1,10 +1,24 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.bmuschko:gradle-nexus-plugin:2.3.1'
+    }
+}
+
 plugins {
     id 'java'
     id "com.github.johnrengelman.shadow" version "5.2.0"
+    id 'io.codearte.nexus-staging' version '0.11.0'
 }
+
+archivesBaseName = 'teachUpload-jvm'
 allprojects {
     group 'tech.hokkaydo'
     version '1.0-SNAPSHOT'
+
+    apply plugin: 'com.bmuschko.nexus'
 
     apply plugin: 'java'
     apply plugin: 'eclipse'
@@ -30,4 +44,42 @@ subprojects {
     test {
         useJUnitPlatform()
     }
+}
+
+modifyPom.call {
+
+    project  {
+        name 'OW4J'
+        description 'Java OverwatchAPI'
+        url 'https://https://github.com/Hokkaydo/OW4J'
+        inceptionYear '2020'
+
+        scm {
+            url 'https://github.com/Hokkaydo/OW4J'
+            connection 'scm:https://github.com/Hokkaydo/OW4J.git'
+            developerConnection 'scm:git://github.com/Hokkaydo/OW4J.git'
+        }
+
+        developers {
+            developer {
+                id 'Hokkaydo'
+                name 'Alexandre Orékhoff'
+                email 'hokkaydo.pro@gmail.com'
+            }
+        }
+    }
+}
+
+
+
+extraArchive {
+    sources = true
+    tests = true
+    javadoc = true
+}
+
+nexus {
+    sign = true
+    repositoryUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+    snapshotRepositoryUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
 }

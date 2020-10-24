@@ -3,7 +3,6 @@ package tech.hokkaydo.ow4j.api.player;
 import tech.hokkaydo.ow4j.api.player.achievement.Achievement;
 import tech.hokkaydo.ow4j.api.player.hero.Hero;
 import tech.hokkaydo.ow4j.api.player.hero.HeroType;
-import tech.hokkaydo.ow4j.api.statistic.Statistic;
 import tech.hokkaydo.ow4j.api.statistic.StatisticContainer;
 import tech.hokkaydo.ow4j.api.util.GameType;
 
@@ -48,11 +47,11 @@ public interface UserInfo {
     Map<HeroType, Hero> getHeroes(HeroType... heroTypes);
 
     /**
-     * Get player achievements </br>
+     * Get player achievements <br>
      * Including achieved and non-achieved achievements
      *
      * @return a {@link List} of {@link Achievement} representing player achieved and non achieved achievements
-     * */
+     */
     List<Achievement> getAchievements();
 
     /**
