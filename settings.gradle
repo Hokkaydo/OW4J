@@ -1,0 +1,4 @@
+rootProject.name = 'OW4J'
+include 'Core'
+include 'api'
+
