@@ -12,7 +12,7 @@ public class OWUserInfoTest {
 
     @BeforeEach
     public void before(){
-        userInfo = OW4J.retrieveData("Hokkaydo#21576").getPlayerInfo();
+        userInfo = OW4J.retrieveData("Hokkaydo#21576").getUserInfo();
     }
 
     @Test

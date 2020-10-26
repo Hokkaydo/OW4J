@@ -1,7 +1,6 @@
 package tech.hokkaydo.ow4j.core;
 
 import org.jsoup.Jsoup;
-import tech.hokkaydo.ow4j.core.entity.OWUserInfo;
 import tech.hokkaydo.ow4j.core.exceptions.OWPlayerNotFoundException;
 import tech.hokkaydo.ow4j.core.retriever.DataRetriever;
 import tech.hokkaydo.ow4j.core.retriever.RetrievedData;
@@ -13,12 +12,6 @@ public class OW4J {
 
     private static final Pattern BTAG_SPLITTER = Pattern.compile("#");
 
-    /**
-     * Get player matching given battleTag data
-     *
-     * @param battleTag : player's battleTag
-     * @return an {@link OWUserInfo} representing player data
-     * */
     public static RetrievedData retrieveData(String battleTag) {
         if(!battleTag.matches("[A-z]+#[0-9]{4,5}")) {
             return new RetrievedData(null, new OWPlayerNotFoundException("Invalid battleTag", OWPlayerNotFoundException.Cause.INVALID_BATTLE_TAG));

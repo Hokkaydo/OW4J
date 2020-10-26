@@ -7,36 +7,46 @@ import java.util.function.Consumer;
 
 public class RetrievedData {
 
-    private final UserInfo userInfoInfo;
-    private final OWPlayerNotFoundException exception;
+    private UserInfo userInfo;
+    private OWPlayerNotFoundException exception;
 
-    public RetrievedData(UserInfo userInfoInfo, OWPlayerNotFoundException exception){
-        this.userInfoInfo = userInfoInfo;
+    public RetrievedData(UserInfo userInfo, OWPlayerNotFoundException exception) {
+        this.userInfo = userInfo;
         this.exception = exception;
-        if(exception != null){
-            exception.printStackTrace();
-        }
     }
 
-    public void ifPresent(Consumer<UserInfo> playerConsumer){
-        if(userInfoInfo == null) return;
-        playerConsumer.accept(userInfoInfo);
+    public boolean isPresent() {
+        return userInfo != null;
     }
-    public void ifEmpty(Consumer<OWPlayerNotFoundException> exceptionConsumer){
-        if(userInfoInfo != null) return;
+
+    public void ifPresent(Consumer<UserInfo> playerConsumer) {
+        if (isPresent()) return;
+        playerConsumer.accept(userInfo);
+    }
+
+    public void ifEmpty(Consumer<OWPlayerNotFoundException> exceptionConsumer) {
+        if (!isPresent()) return;
         exceptionConsumer.accept(exception);
     }
-    public void ifPresentOrElse(Consumer<UserInfo> player, Consumer<OWPlayerNotFoundException> exceptionConsumer){
-        ifPresent(player);
+
+    public UserInfo orElse(UserInfo userInfo) {
+        if (userInfo != null && !isPresent()) {
+            this.userInfo = userInfo;
+            this.exception = null;
+        }
+        return userInfo;
+    }
+
+    public void ifPresentOrElse(Consumer<UserInfo> playerConsumer, Consumer<OWPlayerNotFoundException> exceptionConsumer) {
+        ifPresent(playerConsumer);
         ifEmpty(exceptionConsumer);
     }
-    public UserInfo getPlayerInfo(){
-        return userInfoInfo;
+
+    public UserInfo getUserInfo() {
+        return userInfo;
     }
-    public OWPlayerNotFoundException getException(){
+
+    public OWPlayerNotFoundException getException() {
         return exception;
-    }
-    public boolean isPresent() {
-        return userInfoInfo != null;
     }
 }
