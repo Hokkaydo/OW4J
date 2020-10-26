@@ -12,8 +12,21 @@ public class OW4J {
 
     private static final Pattern BTAG_SPLITTER = Pattern.compile("#");
 
+    /**
+     * Here's the API entrypoint. <br><br>
+     * To use it, you can call the following method to retrieve a {@link RetrievedData} representing the status of the request. <br><br>
+     * If the request returned something, you can get it through {@link RetrievedData#getUserInfo()} method.  <br>
+     * If the request stopped due to an error, you can check it through {@link RetrievedData#getException()} method. <br>
+     *
+     * <br>
+     *
+     * @param battleTag : player's battleTag
+     * @return an {@link RetrievedData} representing request data
+     * @see RetrievedData
+     */
+
     public static RetrievedData retrieveData(String battleTag) {
-        if(!battleTag.matches("[A-z]+#[0-9]{4,5}")) {
+        if (!battleTag.matches("[A-z]+#[0-9]{4,5}")) {
             return new RetrievedData(null, new OWPlayerNotFoundException("Invalid battleTag", OWPlayerNotFoundException.Cause.INVALID_BATTLE_TAG));
         }
         try {
