@@ -62,16 +62,10 @@ artifacts {
 }
 
 // Build, sign, and upload
+
 uploadArchives {
     repositories {
-        mavenDeployer {
-
-            if (!hasProperty('nexusUsername')) {
-                ext.nexusUsername = ''
-            }
-            if (!hasProperty('nexusPassword')) {
-                ext.nexusPassword = ''
-            }
+        task mavenDeployer {
 
             // Sign POM
             beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
