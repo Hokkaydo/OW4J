@@ -1,24 +1,15 @@
-buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath 'com.bmuschko:gradle-nexus-plugin:2.3.1'
-    }
-}
-
 plugins {
     id 'java'
     id "com.github.johnrengelman.shadow" version "5.2.0"
     id 'io.codearte.nexus-staging' version '0.11.0'
+    id 'maven-publish'
+    id 'signing'
 }
 
-archivesBaseName = 'teachUpload-jvm'
 allprojects {
     group 'tech.hokkaydo'
-    version '1.0-SNAPSHOT'
-
-    apply plugin: 'com.bmuschko.nexus'
+    version '0.1-alpha'
+    archivesBaseName = "ow4j"
 
     apply plugin: 'java'
     apply plugin: 'eclipse'
@@ -46,40 +37,80 @@ subprojects {
     }
 }
 
-modifyPom.call {
 
-    project  {
-        name 'OW4J'
-        description 'Java OverwatchAPI'
-        url 'https://https://github.com/Hokkaydo/OW4J'
-        inceptionYear '2020'
+// Signing
+apply plugin: 'signing'
+signing {
+    sign configurations.archives
+}
 
-        scm {
-            url 'https://github.com/Hokkaydo/OW4J'
-            connection 'scm:https://github.com/Hokkaydo/OW4J.git'
-            developerConnection 'scm:git://github.com/Hokkaydo/OW4J.git'
-        }
 
-        developers {
-            developer {
-                id 'Hokkaydo'
-                name 'Alexandre Orékhoff'
-                email 'hokkaydo.pro@gmail.com'
+// Deploying
+apply plugin: 'maven'
+
+// Add Javadoc JAR and sources JAR to artifact
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+artifacts {
+    archives javadocJar, sourcesJar
+}
+
+// Build, sign, and upload
+uploadArchives {
+    repositories {
+        mavenDeployer {
+
+            // Sign POM
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            // Destination
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: nexusUsername, password: nexusPassword)
+            }
+            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: nexusUsername, password: nexusPassword)
+            }
+
+            // Add required metadata to POM
+            pom.project {
+                name 'OW4J'
+                packaging 'jar'
+                description 'Overwatch Java API'
+                url 'https://github.com/Hokkaydo/OW4J'
+
+                scm {
+                    connection 'scm:git:git://github.com/Hokkaydo/OW4J.git'
+                    developerConnection 'scm:git:ssh://github.com/Hokkaydo/OW4J.git'
+                    url 'https://github.com/Hokkaydo/OW4J/tree/master'
+                }
+
+                licenses {
+                    license {
+                        name 'The Apache License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id 'Hokkaydo'
+                        name 'Alexandre Orékhoff'
+                        email 'alexandre.orekhoff@gmail.com'
+                        organization 'Hokkaydo'
+                        organizationUrl 'https://hokkaydo.tech'
+                    }
+                }
             }
         }
     }
 }
 
-
-
-extraArchive {
-    sources = true
-    tests = true
-    javadoc = true
-}
-
-nexus {
-    sign = true
-    repositoryUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
-    snapshotRepositoryUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
+nexusStaging {
+    packageGroup = "tech.hokkaydo"
 }
