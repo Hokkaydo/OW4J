@@ -8,7 +8,7 @@ plugins {
 
 allprojects {
     group 'tech.hokkaydo'
-    version '0.1-alpha'
+    version '0.1.1-alpha'
     archivesBaseName = "ow4j"
 
     apply plugin: 'java'
