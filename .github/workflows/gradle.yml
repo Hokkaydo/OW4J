@@ -14,4 +14,4 @@ jobs:
         with:
           java-version: 14
       - name: Build with Gradle
-        run: gradle build -x signing -x uploadArchives
+        run: gradle build

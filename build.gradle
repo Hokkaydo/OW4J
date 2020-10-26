@@ -37,7 +37,6 @@ subprojects {
     }
 }
 
-
 // Signing
 apply plugin: 'signing'
 signing {
@@ -72,10 +71,10 @@ uploadArchives {
 
             // Destination
             repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-                authentication(userName: nexusUsername ?:'', password: nexusPassword ?: '')
+                authentication(userName: nexusUsername, password: nexusPassword)
             }
             snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-                authentication(userName: nexusUsername ?:'', password: nexusPassword ?: '')
+                authentication(userName: nexusUsername, password: nexusPassword)
             }
 
             // Add required metadata to POM
