@@ -65,7 +65,7 @@ artifacts {
 
 uploadArchives {
     repositories {
-        task mavenDeployer {
+        mavenDeployer {
 
             // Sign POM
             beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
