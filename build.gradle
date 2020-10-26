@@ -66,6 +66,13 @@ uploadArchives {
     repositories {
         mavenDeployer {
 
+            if (!hasProperty('nexusUsername')) {
+                ext.nexusUsername = ''
+            }
+            if (!hasProperty('nexusPassword')) {
+                ext.nexusPassword = ''
+            }
+
             // Sign POM
             beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
